@@ -7,9 +7,9 @@ combat_sim.ipynb - na razie tu siedzi cały kod bitew, notebook jest wygodny do 
 
 misc/ - pierdoły (chociaż stwory.csv jest całkiem przydatny przy grze :D)  
 castle_scores/  
-  castle_scores.csv - względne oceny jednostek Zamku na podstawie symulacji  
-  castle_scores_ai_value_based.csv - oceny oparte na AI Value  
-  caste_comparison.csv - porównanie powyższych
+ - castle_scores.csv - względne oceny jednostek Zamku na podstawie symulacji  
+ - castle_scores_ai_value_based.csv - oceny oparte na AI Value  
+ - caste_comparison.csv - porównanie powyższych
   
 #####  
 
