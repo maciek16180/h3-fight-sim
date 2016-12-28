@@ -2,26 +2,26 @@
 
 Opis plików:
 
-CRTRAITS.TXT - dane o stworkach. Wyczyszczona i lekko zmieniona wersja, w nieco innym formacie niż oryginalny plik z gry.
+CRTRAITS.TXT - dane o stworkach. Wyczyszczona i lekko zmieniona wersja, w nieco innym formacie niż oryginalny plik z gry.  
 combat_sim.ipynb - na razie tu siedzi cały kod bitew, notebook jest wygodny do ekspermentów
 
-misc/ - pierdoły (chociaż stwory.csv jest całkiem przydatny przy grze :D)
-castle_scores/
-  castle_scores.csv - względne oceny jednostek Zamku na podstawie symulacji
-  castle_scores_ai_value_based.csv - oceny oparte na AI Value
+misc/ - pierdoły (chociaż stwory.csv jest całkiem przydatny przy grze :D)  
+castle_scores/  
+  castle_scores.csv - względne oceny jednostek Zamku na podstawie symulacji  
+  castle_scores_ai_value_based.csv - oceny oparte na AI Value  
   caste_comparison.csv - porównanie powyższych
   
 #####  
 
 Jak czytać wyniki:
 
-castle_scores.csv:
+castle_scores.csv:  
   Jednostka X walczy z Y. Eksperymentalnie dobieram liczby jednostek (nX i nY) w oddziałach tak, żeby szanse wygranej każdej ze stron były mniej więcej równe. Liczba w wierszu X i kolumnie Y to nX/nY, czyli ile X trzeba, żeby sprać jednego Y.
   
-castle_scores_ai_value_based.csv:
+castle_scores_ai_value_based.csv:  
   Liczba w wierszu X i kolumnie Y to Y.aivalue/X.aivalue.
   
-castle_comparison.csv:
+castle_comparison.csv:  
   Iloraz pierwszego i drugiego. Usunąłem wyniki bliskie 1 dla lepszej czytelności. Jeśli liczba w wierszu X i kolumnie Y jest mniejsza od 1, to heurystyka AI Value nie docenia X. Jeśli jest większa od 1, to heurystyka przecenia X.
   
 #####
