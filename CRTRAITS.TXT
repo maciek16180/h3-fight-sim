@@ -1,6 +1,6 @@
 Singular,Plural,Wood,Mercury,Ore,Sulfur,Crystal,Gems,Gold,Fight Value,AI Value,Growth,Horde Growth,Hit Points,Speed,Attack,Defense,MinDmg,MaxDmg,Shots,Spells,GuardsLow,GuardsHigh,Ability Text,Attributes
-Pikinier,Pikinierzy,0,0,0,0,0,0,60,100,80,14,0,10,4,4,5,1,3,0,0,20,50,Powstrzymuje szarżę.,0
-Halabardnik,Halabardnicy,0,0,0,0,0,0,75,115,115,14,0,10,5,6,5,2,3,0,0,20,30,Powstrzymuje szarżę.,0
+Pikinier,Pikinierzy,0,0,0,0,0,0,60,100,80,14,0,10,4,4,5,1,3,0,0,20,50,Powstrzymuje szarżę.,cusNO_JOUSTING
+Halabardnik,Halabardnicy,0,0,0,0,0,0,75,115,115,14,0,10,5,6,5,2,3,0,0,20,30,Powstrzymuje szarżę.,cusNO_JOUSTING
 Łucznik,Łucznicy,0,0,0,0,0,0,100,115,126,9,0,10,4,6,3,2,3,12,0,16,30,,SHOOTING_ARMY
 Kusznik,Kusznicy,0,0,0,0,0,0,150,115,184,9,0,10,6,6,3,2,3,24,0,16,25,Strzela dwukrotnie.,const_two_attacks | SHOOTING_ARMY
 Gryf,Gryfy,0,0,0,0,0,0,200,324,351,7,3,25,6,8,8,3,6,0,0,12,25,Dwukrotnie kontratakuje.,DOUBLE_WIDE | FLYING_ARMY
@@ -12,7 +12,7 @@ Kapłan,Kapłani,0,0,0,0,0,0,450,500,750,3,0,30,7,12,10,10,12,24,0,8,12,Brak ogr
 Kawalerzysta,Kawalerzyści,0,0,0,0,0,0,1000,1668,1946,2,0,100,7,15,15,15,25,0,0,5,12,Szarża.,DOUBLE_WIDE | const_jousting
 Czempion,Czempioni,0,0,0,0,0,0,1200,1800,2100,2,0,100,9,16,16,20,25,0,0,5,10,Szarża.,DOUBLE_WIDE | const_jousting
 Anioł,Anioły,0,0,0,0,0,1,3000,3585,5019,1,0,200,12,20,20,50,50,0,0,4,10,Nienawidzi diabłów.,FLYING_ARMY | const_raises_morale | KING_2
-Archanioł,Archanioły,0,0,0,0,0,3,5000,6033,8776,1,0,250,18,30,30,50,50,1,1,3,8, Nienawidzi diabłów. Wskrzesza. +1 do morale armii.,DOUBLE_WIDE | FLYING_ARMY | const_raises_morale | KING_2
+Archanioł,Archanioły,0,0,0,0,0,3,5000,6033,8776,1,0,250,18,30,30,50,50,1,1,3,8,Nienawidzi diabłów. Wskrzesza. +1 do morale armii.,DOUBLE_WIDE | FLYING_ARMY | const_raises_morale | KING_2
 Centaur,Centaury,0,0,0,0,0,0,70,100,100,14,0,8,6,5,3,2,3,0,0,20,50,,DOUBLE_WIDE
 Centaur bojowy,Centaury bojowe,0,0,0,0,0,0,90,115,138,14,0,10,8,6,3,2,3,0,0,20,30,,DOUBLE_WIDE
 Krasnolud,Krasnoludy,0,0,0,0,0,0,120,194,138,8,4,20,3,6,7,2,4,0,0,16,30,20% odporności na magię.,0
@@ -37,8 +37,8 @@ Mag,Magowie,0,0,0,0,0,0,350,418,570,4,0,25,5,11,8,7,9,24,0,10,20,Bez ograniczeń
 Arcymag,Arcymagowie,0,0,0,0,0,0,450,467,680,4,0,30,7,12,9,7,9,24,0,10,16,Bez ograniczeń w walce wręcz. Zmniejsza koszt zaklęć bohatera.,SHOOTING_ARMY | const_no_melee_penalty | const_no_wall_penalty
 Dżinn,Dżinny,0,0,0,0,0,0,550,680,884,3,0,40,7,12,12,13,16,0,0,8,16,Nienawidzi ifritów.,FLYING_ARMY
 Wielki dżinn,Wielkie dżinny,0,0,0,0,0,0,600,748,942,3,0,40,11,12,12,13,16,3,3,8,12,Nienawidzi ifritów. Rzuca czary dające losowe korzyści.,FLYING_ARMY
-Naga,Nagi,0,0,0,0,0,0,1100,2016,2016,2,0,110,5,16,13,20,20,0,0,5,12,Powstrzymuje kontratak.,DOUBLE_WIDE
-Królewska naga,Królewskie nagi,0,0,0,0,0,0,1600,2485,2840,2,0,110,7,16,13,30,30,0,0,5,10,Powstrzymuje kontratak.,DOUBLE_WIDE
+Naga,Nagi,0,0,0,0,0,0,1100,2016,2016,2,0,110,5,16,13,20,20,0,0,5,12,Powstrzymuje kontratak.,DOUBLE_WIDE | const_free_attack
+Królewska naga,Królewskie nagi,0,0,0,0,0,0,1600,2485,2840,2,0,110,7,16,13,30,30,0,0,5,10,Powstrzymuje kontratak.,DOUBLE_WIDE | const_free_attack
 Gigant,Giganci,0,0,0,0,0,1,2000,3146,3718,1,0,150,7,19,16,40,60,0,0,4,10,Odporność na zaklęcia umysłu.,KING_3
 Tytan,Tytani,0,0,0,0,0,2,5000,5000,7500,1,0,300,11,24,24,40,60,24,0,3,8,Odporność na zaklęcia umysłu. Brak ograniczeń w walce wręcz. Nienawidzi czarnych smoków.,SHOOTING_ARMY | const_no_melee_penalty | KING_3
 Chochlik,Chochliki,0,0,0,0,0,0,50,50,50,15,8,4,5,2,3,1,2,0,0,20,50,,0
@@ -46,23 +46,23 @@ Chowaniec,Chowańce,0,0,0,0,0,0,60,60,60,15,8,4,7,4,4,1,2,0,0,20,30,Kradnie man�
 Gog,Gogi,0,0,0,0,0,0,125,145,159,8,0,13,4,6,4,2,4,12,0,16,30,,SHOOTING_ARMY
 Magog,Magogi,0,0,0,0,0,0,175,210,240,8,0,13,6,7,4,2,4,24,0,16,25,Atak ognistymi kulami.,SHOOTING_ARMY
 Piekielny ogar,Piekielne ogary,0,0,0,0,0,0,200,275,357,5,3,25,7,10,6,2,7,0,0,12,25,,DOUBLE_WIDE | FLYING_ARMY
-Cerber,Cerbery,0,0,0,0,0,0,250,308,392,5,3,25,8,10,8,2,7,0,0,12,20,Atakuje 3 przyległe do siebie pola. Powstrzymuje kontratak.,DOUBLE_WIDE | FLYING_ARMY
+Cerber,Cerbery,0,0,0,0,0,0,250,308,392,5,3,25,8,10,8,2,7,0,0,12,20,Atakuje 3 przyległe do siebie pola. Powstrzymuje kontratak.,DOUBLE_WIDE | FLYING_ARMY | const_free_attack
 Demon,Demony,0,0,0,0,0,0,250,445,445,4,0,35,5,10,10,7,9,0,0,10,20,,0
 Rogaty demon,Rogate demony,0,0,0,0,0,0,270,480,480,4,0,40,6,10,10,7,9,0,0,10,16,,0
 Czart,Czarty,0,0,0,0,0,0,500,765,765,3,0,45,6,13,13,13,17,0,0,8,16,,0
 Czarci lord,Czarci lordowie,0,0,0,0,0,0,700,1071,1224,3,0,45,7,13,13,13,17,1,1,8,12,Przywołuje demony z ciał sprzymierzeńców.,0
 Ifryt,Ifryty,0,0,0,0,0,0,900,1413,1670,2,0,90,9,16,12,16,24,0,0,5,12,Odporność na magię ognia. Nienawidzi dżinnów.,0
 Sułtański ifryt,Sułtańskie ifryty,0,0,0,0,0,0,1100,1584,1848,2,0,90,13,16,14,16,24,0,0,5,10,Odporność na magię ognia. Nienawidzi dżinnów. Tarcza ogniowa.,0
-Diabeł,Diabły,0,1,0,0,0,0,2700,3759,5101,1,0,160,11,19,21,30,40,0,0,4,10, -1 do szczęścia przeciwnika. Powstrzymuje kontratak. Nienawidzi aniołów.,FLYING_ARMY | KING_2
-Arcydiabeł,Arcydiabły,0,2,0,0,0,0,4500,5243,7115,1,0,200,17,26,28,30,40,0,0,3,8, -1 do szczęścia przeciwnika. Powstrzymuje kontratak. Nienawidzi aniołów.,FLYING_ARMY | KING_2
+Diabeł,Diabły,0,1,0,0,0,0,2700,3759,5101,1,0,160,11,19,21,30,40,0,0,4,10, -1 do szczęścia przeciwnika. Powstrzymuje kontratak. Nienawidzi aniołów.,FLYING_ARMY | KING_2 | const_free_attack
+Arcydiabeł,Arcydiabły,0,2,0,0,0,0,4500,5243,7115,1,0,200,17,26,28,30,40,0,0,3,8, -1 do szczęścia przeciwnika. Powstrzymuje kontratak. Nienawidzi aniołów.,FLYING_ARMY | KING_2 | const_free_attack
 Szkielet,Szkielety,0,0,0,0,0,0,60,75,60,12,6,6,4,5,4,1,3,0,0,20,50,Nieumarły.,IS_UNDEAD
 Kościej,Kościeje,0,0,0,0,0,0,70,85,85,12,6,6,5,6,6,1,3,0,0,20,30,Nieumarły.,IS_UNDEAD
 Ożywieniec,Ożywieńcy,0,0,0,0,0,0,100,140,98,8,0,15,3,5,5,2,3,0,0,16,30,Nieumarły.,IS_UNDEAD
 Zombie,Zombie,0,0,0,0,0,0,125,160,128,8,0,20,4,5,5,2,3,0,0,16,25,Nieumarły. Sieje zarazę.,IS_UNDEAD
 Zjawa,Zjawy,0,0,0,0,0,0,200,231,252,7,0,18,5,7,7,3,5,0,0,12,25,Nieumarły. Zdolność regeneracji.,FLYING_ARMY | IS_UNDEAD
 Upiór,Upiory,0,0,0,0,0,0,230,252,315,7,0,18,7,7,7,3,5,0,0,12,20,Nieumarły. Zdolność regeneracji. Wysysa manę.,FLYING_ARMY | IS_UNDEAD
-Wampir,Wampiry,0,0,0,0,0,0,360,518,555,4,0,30,6,10,9,5,8,0,0,10,20,Nieumarły. Powstrzymuje kontratak.,FLYING_ARMY | IS_UNDEAD
-Wampirzy lord,Wampirzy lordowie,0,0,0,0,0,0,500,652,783,4,0,40,9,10,10,5,8,0,0,10,16,Nieumarły. Wysysa punkty życia. Powstrzymuje kontratak.,FLYING_ARMY | IS_UNDEAD
+Wampir,Wampiry,0,0,0,0,0,0,360,518,555,4,0,30,6,10,9,5,8,0,0,10,20,Nieumarły. Powstrzymuje kontratak.,FLYING_ARMY | IS_UNDEAD | const_free_attack
+Wampirzy lord,Wampirzy lordowie,0,0,0,0,0,0,500,652,783,4,0,40,9,10,10,5,8,0,0,10,16,Nieumarły. Wysysa punkty życia. Powstrzymuje kontratak.,FLYING_ARMY | IS_UNDEAD | const_free_attack
 Lisz,Lisze,0,0,0,0,0,0,550,742,848,3,0,30,6,13,10,11,13,12,0,8,16,Nieumarły. Atak zabójczą chmurą.  ,SHOOTING_ARMY | IS_UNDEAD
 Arcylisz,Arcylisze,0,0,0,0,0,0,600,889,1079,3,0,40,7,13,10,11,15,24,0,8,12,Nieumarły. Atak zabójczą chmurą.  ,SHOOTING_ARMY | IS_UNDEAD
 Czarny rycerz,Czarni rycerze,0,0,0,0,0,0,1200,1753,2087,2,0,120,7,16,16,15,30,0,0,5,12,Nieumarły. Przeklina wrogów.,DOUBLE_WIDE | IS_UNDEAD
@@ -72,7 +72,7 @@ Upiorny smok,Upiorne smoki,0,1,0,0,0,0,3000,3228,4696,1,0,200,14,19,17,25,50,0,0
 Troglodyta,Troglodyci,0,0,0,0,0,0,50,73,59,14,7,5,4,4,3,1,3,0,0,20,50,Odporność na oślepienie.,0
 Piekielny troglodyta,Piekielni troglodyci,0,0,0,0,0,0,65,84,84,14,7,6,5,5,4,1,3,0,0,20,30,Odporność na oślepienie.,0
 Harpia,Harpie,0,0,0,0,0,0,130,140,154,8,0,14,6,6,5,1,4,0,0,16,30,Atakuje i wraca na miejsce.,FLYING_ARMY
-Harpia wiedźma,Harpie wiedźmy,0,0,0,0,0,0,170,196,238,8,0,14,9,6,6,1,4,0,0,16,25,Atakuje i wraca na miejsce. Powstrzymuje kontratak.,FLYING_ARMY
+Harpia wiedźma,Harpie wiedźmy,0,0,0,0,0,0,170,196,238,8,0,14,9,6,6,1,4,0,0,16,25,Atakuje i wraca na miejsce. Powstrzymuje kontratak.,FLYING_ARMY | const_free_attack
 Złe oko,Złe oczy,0,0,0,0,0,0,250,240,336,7,0,22,5,9,7,3,5,12,0,12,25,Brak ograniczeń w walce wręcz.,SHOOTING_ARMY | const_no_melee_penalty
 Obserwator,Obserwatorzy,0,0,0,0,0,0,280,245,367,7,0,22,7,10,8,3,5,24,0,12,20,Brak ograniczeń w walce wręcz.,SHOOTING_ARMY | const_no_melee_penalty
 Meduza,Meduzy,0,0,0,0,0,0,300,379,517,4,0,25,5,9,9,6,8,4,0,10,20,Brak ograniczeń w walce wręcz. Zamienia w kamień.,DOUBLE_WIDE | SHOOTING_ARMY | const_no_melee_penalty
@@ -86,7 +86,7 @@ Czarny smok,Czarne smoki,0,0,0,2,0,0,4000,6783,8721,1,0,300,15,25,25,40,50,0,0,3
 Goblin,Gobliny,0,0,0,0,0,0,40,60,60,15,8,5,5,4,2,1,2,0,0,20,50,,0
 Hobgoblin,Hobgobliny,0,0,0,0,0,0,50,65,78,15,8,5,7,5,3,1,2,0,0,20,30,,0
 Wilczy jeździec,Wilczy jeźdźcy,0,0,0,0,0,0,100,130,130,9,0,10,6,7,5,2,4,0,0,16,30,,DOUBLE_WIDE
-Wilczy rycerz,Wilczy rycerze,0,0,0,0,0,0,140,174,203,9,0,10,8,8,5,3,4,0,0,16,25,Atakuje dwukrotnie.,DOUBLE_WIDE
+Wilczy rycerz,Wilczy rycerze,0,0,0,0,0,0,140,174,203,9,0,10,8,8,5,3,4,0,0,16,25,Atakuje dwukrotnie.,DOUBLE_WIDE | const_two_attacks
 Ork,Orkowie,0,0,0,0,0,0,150,175,192,7,0,15,4,8,4,2,5,12,0,12,25,,SHOOTING_ARMY
 Uruk,Urukowie,0,0,0,0,0,0,165,200,240,7,0,20,5,8,4,2,5,24,0,12,20,,SHOOTING_ARMY
 Ogr,Ogry,0,0,0,0,0,0,300,520,416,4,0,40,4,13,7,6,12,0,0,10,20,,0
@@ -109,8 +109,8 @@ Bazyliszek,Bazyliszki,0,0,0,0,0,0,325,506,552,4,0,35,5,11,11,6,10,0,0,8,16,Zamie
 Bazyliszek większy,Bazyliszki większe,0,0,0,0,0,0,400,561,714,4,0,40,7,12,12,6,10,0,0,8,12,Zamienia w kamień.,DOUBLE_WIDE
 Wiwerna,Wiwerny,0,0,0,0,0,0,800,1050,1350,2,0,70,7,14,14,14,18,0,0,5,12,,DOUBLE_WIDE | FLYING_ARMY
 Wiwerna królewska,Wiwerny królewskie,0,0,0,0,0,0,1100,1181,1518,2,0,70,11,14,14,18,22,0,0,5,10,Trujący atak.,DOUBLE_WIDE | FLYING_ARMY
-Hydra,Hydry,0,0,0,0,0,0,2200,4120,4120,1,0,175,5,16,18,25,45,0,0,4,10,Atakuje wszystkich przyległych wrogów. Powstrzymuje kontratak.,DOUBLE_WIDE | KING_1
-Hydra chaosu,Hydry chaosu,0,0,0,1,0,0,3500,5272,5931,1,0,250,7,18,20,25,45,0,0,3,8,Atakuje wszystkich przyległych wrogów. Powstrzymuje kontratak.,DOUBLE_WIDE | KING_1
+Hydra,Hydry,0,0,0,0,0,0,2200,4120,4120,1,0,175,5,16,18,25,45,0,0,4,10,Atakuje wszystkich przyległych wrogów. Powstrzymuje kontratak.,DOUBLE_WIDE | KING_1 | const_free_attack
+Hydra chaosu,Hydry chaosu,0,0,0,1,0,0,3500,5272,5931,1,0,250,7,18,20,25,45,0,0,3,8,Atakuje wszystkich przyległych wrogów. Powstrzymuje kontratak.,DOUBLE_WIDE | KING_1 | const_free_attack
 Żywiołak powietrza,Żywiołaki powietrza,0,0,0,0,0,0,250,324,356,6,0,25,7,9,9,2,8,0,0,12,20,Żywiołak. Odporność na deszcz meteorów. Wrażliwość na błyskawice.,cusELEMENTAL
 Żywiołak ziemi,Żywiołaki ziemi,0,0,0,0,0,0,400,415,330,4,0,40,4,10,10,4,8,0,0,10,16,Żywiołak. Odporność na błyskawice. Wrażliwość na deszcz meteorów.,cusELEMENTAL
 Żywiołak ognia,Żywiołaki ognia,0,0,0,0,0,0,350,345,345,5,0,35,6,10,8,4,6,0,0,12,20,Żywiołak. Odporność na magię ognia. Wrażliwość na lód.,cusELEMENTAL
