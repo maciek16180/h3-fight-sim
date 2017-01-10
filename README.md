@@ -1,5 +1,7 @@
 # h3-fight-sim
 
+W tej chwili wyniki są nieaktualne!
+
 Opis plików:
 
 CRTRAITS.TXT - dane o stworkach. Wyczyszczona i lekko zmieniona wersja, w nieco innym formacie niż oryginalny plik z gry.  
@@ -43,5 +45,8 @@ Uwagi:
     - podwójne obrażenia Upiornego rycerza
     - wyssanie życia Wampirzego lorda
     - spojrzenie śmierci
+    - nienawiść i podwójne obrażenia żywiołaków
+    - strach Błękitnego smoka
+    - regeneracja Zjaw i Trolli
     
 - W walce strzelca ze zwykłą jednostką sprawdzam ile strzałów jest wykonywane z karą za odległość (przy założeniu optymalnych ruchów obu stron, wliczając czekanie - wydaje mi się, że komputer to umie)
