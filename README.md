@@ -48,5 +48,8 @@ Uwagi:
     - nienawiść i podwójne obrażenia żywiołaków
     - strach Błękitnego smoka
     - regeneracja Zjaw i Trolli
+    - tarcza ognia Sułtańskich ifrytów
+    - kwasowy oddech Rdzawego smoka
+    - atak błyskawicą Ptaka gromu
     
 - W walce strzelca ze zwykłą jednostką sprawdzam ile strzałów jest wykonywane z karą za odległość (przy założeniu optymalnych ruchów obu stron, wliczając czekanie - wydaje mi się, że komputer to umie)
