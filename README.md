@@ -44,12 +44,14 @@ Uwagi:
     - obniżanie obrony Behemotów
     - podwójne obrażenia Upiornego rycerza
     - wyssanie życia Wampirzego lorda
-    - spojrzenie śmierci
+    - spojrzenie śmierci Wielkiej gorgony
     - nienawiść i podwójne obrażenia żywiołaków
     - strach Błękitnego smoka
     - regeneracja Zjaw i Trolli
     - tarcza ognia Sułtańskich ifrytów
     - kwasowy oddech Rdzawego smoka
     - atak błyskawicą Ptaka gromu
+    - postarzanie Upiornego smoka
+    - zatrucie Królewskiej wiwerny
     
 - W walce strzelca ze zwykłą jednostką sprawdzam ile strzałów jest wykonywane z karą za odległość (przy założeniu optymalnych ruchów obu stron, wliczając czekanie - wydaje mi się, że komputer to umie)
