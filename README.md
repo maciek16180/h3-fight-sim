@@ -53,5 +53,7 @@ Uwagi:
     - atak błyskawicą Ptaka gromu
     - postarzanie Upiornego smoka
     - zatrucie Królewskiej wiwerny
+    - klątwa Mumii i Czarnych / Upiornych rycerzy (drobna nieścisłość w czasie trwania)
+    - osłabienie Smoczej ważki (j.w.)
     
 - W walce strzelca ze zwykłą jednostką sprawdzam ile strzałów jest wykonywane z karą za odległość (przy założeniu optymalnych ruchów obu stron, wliczając czekanie - wydaje mi się, że komputer to umie)
