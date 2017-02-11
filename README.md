@@ -1,6 +1,6 @@
 # h3-fight-sim
 
-Aktualne wyniki wszytkich walk są w scores/scores.csv
+**Aktualne wyniki wszytkich walk są w scores/scores.csv**
 
 Opis plików:
 
