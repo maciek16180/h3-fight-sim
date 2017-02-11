@@ -1,23 +1,25 @@
 # h3-fight-sim
 
-W tej chwili wyniki są nieaktualne!
+Aktualne wyniki wszytkich walk są w scores/scores.csv
 
 Opis plików:
 
 CRTRAITS.TXT - dane o stworkach. Wyczyszczona i lekko zmieniona wersja, w nieco innym formacie niż oryginalny plik z gry.  
-combat_sim.ipynb - na razie tu siedzi cały kod bitew, notebook jest wygodny do ekspermentów
+combat_sim.ipynb - notebook do eksperymentów
+README.md - ten plik
+combat.py - kod walk
+unit.py - reprezentacja jednostki i oddziału
 
-misc/ - pierdoły (chociaż stwory.csv jest całkiem przydatny przy grze :D)  
-castle_scores/  
- - castle_scores.csv - względne oceny jednostek Zamku na podstawie symulacji  
- - castle_scores_ai_value_based.csv - oceny oparte na AI Value  
- - caste_comparison.csv - porównanie powyższych
+misc/ - pierdoły
+scores/ - wyniki
   
 #####  
 
 Jak czytać wyniki:
 
-castle_scores.csv:  
+**wyniki w misc/castle_scores są nieaktualne**
+
+scores.csv, castle_scores.csv:  
   Jednostka X walczy z Y. Eksperymentalnie dobieram liczby jednostek (nX i nY) w oddziałach tak, żeby szanse wygranej każdej ze stron były mniej więcej równe. Liczba w wierszu X i kolumnie Y to nX/nY, czyli ile X trzeba, żeby sprać jednego Y.
   
 castle_scores_ai_value_based.csv:  
