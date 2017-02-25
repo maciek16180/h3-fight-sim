@@ -4,13 +4,18 @@
 
 Opis plików:
 
-CRTRAITS.TXT - dane o stworkach. Wyczyszczona i lekko zmieniona wersja, w nieco innym formacie niż oryginalny plik z gry.  
+CRTRAITS.TXT - dane o stworkach. Wyczyszczona i lekko zmieniona wersja, w nieco innym formacie niż oryginalny plik z gry. 
+
 combat_sim.ipynb - notebook do eksperymentów
+
 README.md - ten plik
+
 combat.py - kod walk
+
 unit.py - reprezentacja jednostki i oddziału
 
 misc/ - pierdoły
+
 scores/ - wyniki
   
 #####  
