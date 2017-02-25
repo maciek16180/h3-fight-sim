@@ -132,50 +132,61 @@ def fight(stackA, stackB, num_iter):
     return wins
     
 
-def find_balance(nameA, nameB, num_iter):
+def find_balance(nameA, nameB, num_iter, startA=None):
+    
+    if nameA == nameB:
+        if startA:
+            return startA, startA
+        return 1, 1
     
     def balanced(result):
         return (num_iter / 2) * .95 < result[A.name][0] < (num_iter / 2) * 1.05
     
     unitA = make_unit(nameA)
     unitB = make_unit(nameB)
-    A = stack(unitA, unitB.ai_value * 10)
-    B = stack(unitB, unitA.ai_value * 10)
+    
+    startA = startA or unitB.ai_value * 10
+    startB = int(float(startA) / unitB.ai_value * unitA.ai_value)
+    
+    A = stack(unitA, startA)
+    B = stack(unitB, startB)
     
     res = fight(A, B, num_iter)
     
     if balanced(res):
         return A.count, B.count
     
-    last_loser = A if res[A.name][0] < res[B.name][0] else B
-    inc = last_loser.count / 10
+    B_won_last = res[A.name][0] < res[B.name][0]
+    sign = -1 if B_won_last else 1
+    change = sign * max(int(B.count / 10.), 1)
     enough = False
-    
+            
     while not enough:
-        low = last_loser.count
-        last_loser.count += inc
+        x1 = B.count
+        B.count += change
         res = fight(A, B, num_iter)
-        loser = A if res[A.name][0] < res[B.name][0] else B
-        enough = last_loser is not loser
+        B_won = res[A.name][0] < res[B.name][0]
+        enough = B_won != B_won_last
         if not enough:
-            last_loser = loser
+            B_won_last = B_won
         
     if balanced(res):
         return A.count, B.count
     
-    high = last_loser.count
+    x2 = B.count
     
-    # here binsearch from (low, high) for balanced result
-    X = last_loser
+    # here binsearch from for balanced result
+    low = min(x1, x2)
+    high = max(x1, x2)
     
     while True:
         middle = low + (high - low) / 2
-        X.count = middle
+        B.count = middle
         res = fight(A, B, num_iter)
         if balanced(res) or np.abs(high - low) <= 1:
-            return A.count, B.count
-        loser = A if res[A.name][0] < res[B.name][0] else B
-        if X is loser:
-            low = middle + 1
-        else:
+            return A.count, max(B.count, 1)
+        B_won = res[A.name][0] < res[B.name][0]
+        if B_won:
             high = middle - 1
+        else:
+            low = middle + 1
