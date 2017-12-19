@@ -17,11 +17,13 @@ def calculate_scores(num_fights=500, log=100):
     for u_idx in range(units.shape[0]):
         u_name = units[u_idx][0]
         for v_idx in range(u_idx + 1, units.shape[0]):
-            cnt_u, cnt_v = find_balance(u_name, units[v_idx][0], num_fights)
+            v_name = units[v_idx][0]
+            print('%s vs %s' % (u_name, v_name))
+            cnt_u, cnt_v = find_balance(u_name, v_name, num_fights)
             scores[u_idx, v_idx] = cnt_u / float(cnt_v)
             scores[v_idx, u_idx] = cnt_v / float(cnt_u)
             total_pairs += 1
-            if not total_pairs % 10:
+            if not total_pairs % log:
                 print('Done {} pairs in {:.2f}s'.format(
                     total_pairs, time.time() - t0))
 
