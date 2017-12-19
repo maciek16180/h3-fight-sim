@@ -190,8 +190,10 @@ class Stack(object):
 
         return base_dmg, base_dmg_bonus, base_dmg_reduction
 
-    def attack_melee(self, other, dmg_bonus=0., dmg_reductions=[],
+    def attack_melee(self, other, dmg_bonus=0., dmg_reductions=None,
                      melee_penalty=False, retaliation=False):
+        if dmg_reductions is None:
+            dmg_reductions = []
         base_dmg, base_dmg_bonus, base_dmg_reduction = \
             self.__calc_base_damage(other)
         dmg_bonus += base_dmg_bonus
@@ -219,6 +221,7 @@ class Stack(object):
         # damage dealt is at most 20% of total HP of Efreet stack
         fire_shield_damage = .2 * \
             min(damage, (other.count - 1) * other.hp + other.hp_left)
+            
         for reduction in dmg_reductions:
             damage *= 1. - reduction
 
