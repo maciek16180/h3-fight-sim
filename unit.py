@@ -15,52 +15,58 @@ crap = ['Plural', 'Wood', 'Mercury', 'Ore', 'Sulfur', 'Crystal', 'Gems',
 data.drop(crap, axis=1, inplace=True)
 
 
-keywords = {'DOUBLE_WIDE',
-            'SHOOTING_ARMY',
-            'const_free_attack',
-            'const_jousting',
-            'const_no_melee_penalty',
-            'const_two_attacks',
-            'IS_UNDEAD',
-            'cusELEMENTAL',
-            'cusGOLEM'}
+keywords = {
+    'DOUBLE_WIDE',
+    'SHOOTING_ARMY',
+    'const_free_attack',
+    'const_jousting',
+    'const_no_melee_penalty',
+    'const_two_attacks',
+    'IS_UNDEAD',
+    'cusELEMENTAL',
+    'cusGOLEM'
+}
 
-haters = {('Angel', 'Arch Devil'),
-          ('Angel', 'Devil'),
-          ('Archangel', 'Arch Devil'),
-          ('Archangel', 'Devil'),
-          ('Arch Devil', 'Angel'),
-          ('Arch Devil', 'Archangel'),
-          ('Black Dragon', 'Giant'),
-          ('Black Dragon', 'Titan'),
-          ('Devil', 'Angel'),
-          ('Devil', 'Archangel'),
-          ('Genie', 'Efreet'),
-          ('Genie', 'Efreet Sultan'),
-          ('Efreet', 'Genie'),
-          ('Efreet', 'Master Genie'),
-          ('Efreet Sultan', 'Genie'),
-          ('Efreet Sultan', 'Master Genie'),
-          ('Titan', 'Black Dragon'),
-          ('Master Genie', 'Efreet'),
-          ('Master Genie', 'Efreet Sultan')}
+haters = {
+    ('Angel', 'Arch Devil'),
+    ('Angel', 'Devil'),
+    ('Archangel', 'Arch Devil'),
+    ('Archangel', 'Devil'),
+    ('Arch Devil', 'Angel'),
+    ('Arch Devil', 'Archangel'),
+    ('Black Dragon', 'Giant'),
+    ('Black Dragon', 'Titan'),
+    ('Devil', 'Angel'),
+    ('Devil', 'Archangel'),
+    ('Genie', 'Efreet'),
+    ('Genie', 'Efreet Sultan'),
+    ('Efreet', 'Genie'),
+    ('Efreet', 'Master Genie'),
+    ('Efreet Sultan', 'Genie'),
+    ('Efreet Sultan', 'Master Genie'),
+    ('Titan', 'Black Dragon'),
+    ('Master Genie', 'Efreet'),
+    ('Master Genie', 'Efreet Sultan')
+}
 
-elementals = {('Storm Elemental', 'Magma Elemental'),
-              ('Storm Elemental', 'Earth Elemental'),
-              ('Energy Elemental', 'Ice Elemental'),
-              ('Energy Elemental', 'Water Elemental'),
-              ('Ice Elemental', 'Energy Elemental'),
-              ('Ice Elemental', 'Fire Elemental'),
-              ('Magma Elemental', 'Storm Elemental'),
-              ('Magma Elemental', 'Air Elemental'),
-              ('Fire Elemental', 'Ice Elemental'),
-              ('Fire Elemental', 'Water Elemental'),
-              ('Air Elemental', 'Magma Elemental'),
-              ('Air Elemental', 'Earth Elemental'),
-              ('Water Elemental', 'Energy Elemental'),
-              ('Water Elemental', 'Fire Elemental'),
-              ('Earth Elemental', 'Storm Elemental'),
-              ('Earth Elemental', 'Air Elemental')}
+elementals = {
+    ('Storm Elemental', 'Magma Elemental'),
+    ('Storm Elemental', 'Earth Elemental'),
+    ('Energy Elemental', 'Ice Elemental'),
+    ('Energy Elemental', 'Water Elemental'),
+    ('Ice Elemental', 'Energy Elemental'),
+    ('Ice Elemental', 'Fire Elemental'),
+    ('Magma Elemental', 'Storm Elemental'),
+    ('Magma Elemental', 'Air Elemental'),
+    ('Fire Elemental', 'Ice Elemental'),
+    ('Fire Elemental', 'Water Elemental'),
+    ('Air Elemental', 'Magma Elemental'),
+    ('Air Elemental', 'Earth Elemental'),
+    ('Water Elemental', 'Energy Elemental'),
+    ('Water Elemental', 'Fire Elemental'),
+    ('Earth Elemental', 'Storm Elemental'),
+    ('Earth Elemental', 'Air Elemental')
+}
 
 
 def binomial(n, p):
