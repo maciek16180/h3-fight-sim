@@ -70,7 +70,7 @@ elementals = {
 
 
 def binomial(n, p):
-    return sum(random() < p for _ in range(n))
+    return sum(random() < p for _ in range(int(n)))
 
 
 def make_unit(name):
@@ -221,7 +221,7 @@ class Stack(object):
         # damage dealt is at most 20% of total HP of Efreet stack
         fire_shield_damage = .2 * \
             min(damage, (other.count - 1) * other.hp + other.hp_left)
-            
+
         for reduction in dmg_reductions:
             damage *= 1. - reduction
 
