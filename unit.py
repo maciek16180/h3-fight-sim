@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy as np
 
 from math import ceil
 from random import random, randint
@@ -70,7 +71,9 @@ elementals = {
 
 
 def binomial(n, p):
-    return sum(random() < p for _ in range(int(n)))
+    return np.random.binomial(n, p)
+    # no numpy alternative (slow)
+    # return sum(random() < p for _ in range(int(n)))
 
 
 def make_unit(name):
@@ -172,7 +175,7 @@ class Stack(object):
                             for _ in range(int(self.count))])
         else:
             base_dmg = sum([randint(self.dmg_min, real_dmg_max)
-                            for _ in range(10)]) * self.count / 10
+                            for _ in range(10)]) * self.count // 10
 
         defense = other.defense
         if self.name == 'Behemoth':
@@ -406,7 +409,7 @@ class Stack(object):
         self.aged = 3 if self.speed < 14 else 2
         if not was_already_aged:
             hp_missing = self.hp - self.hp_left
-            self.hp = (self.hp + 1) / 2
+            self.hp = (self.hp + 1) // 2
             self.hp_left = max(1, self.hp - hp_missing)
 
     def age(self):
@@ -488,8 +491,10 @@ class Stack(object):
     def death_stare(self, other):
         assert self.name == 'Mighty Gorgon' and not other.is_nonliving()
         to_death_stare = min(binomial(n=self.count, p=.1),
-                             (self.count + 9) / 10)
-        other.count = max(0, other.count - to_death_stare)
+                             (self.count + 9) // 10)
+        if to_death_stare:
+            other.count = max(0, other.count - to_death_stare)
+            other.hp_left = other.hp
 
     def rebirth(self):
         assert (self.name == 'Phoenix' and not self.is_alive() and

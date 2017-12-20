@@ -101,24 +101,24 @@ def fight(stackA, stackB, num_iter):
         avoid_by_wait = False
 
         if walker.speed < shooter.speed:
-            num_shots = to_walk / walker.speed + (to_walk % walker.speed > 0)
+            num_shots = to_walk // walker.speed + (to_walk % walker.speed > 0)
         elif walker.speed > shooter.speed:
-            num_shots = to_walk / walker.speed - (to_walk % walker.speed == 0)
+            num_shots = to_walk // walker.speed - (to_walk % walker.speed == 0)
             avoid_by_wait = True
         else:
             if random() < .5:
-                num_shots = to_walk / walker.speed + \
+                num_shots = to_walk // walker.speed + \
                     (to_walk % walker.speed > 0)
             else:
-                num_shots = to_walk / walker.speed - \
+                num_shots = to_walk // walker.speed - \
                     (to_walk % walker.speed == 0)
 
         num_full_shots = max(0, num_shots - avoid_by_move - avoid_by_wait)
         num_half_shots = num_shots - num_full_shots
 
-        for j in range(int(num_half_shots)):
+        for j in range(num_half_shots):
             range_hit(shooter, walker, apply_penalty=True)
-        for j in range(int(num_full_shots)):
+        for j in range(num_full_shots):
             range_hit(shooter, walker, apply_penalty=False)
 
         current, other = walker, shooter
@@ -177,7 +177,9 @@ def find_balance(nameA, nameB, num_iter, startA=None):
         return 1, 1
 
     def balanced(result):
-        return (num_iter / 2) * .95 < result[A.name][0] < (num_iter / 2) * 1.05
+        return (num_iter // 2) * .95 < \
+            result[A.name][0] < \
+            (num_iter // 2) * 1.05
 
     unitA = make_unit(nameA)
     unitB = make_unit(nameB)
@@ -218,7 +220,7 @@ def find_balance(nameA, nameB, num_iter, startA=None):
 
     # here binsearch from [low, high] for balanced result
     while True:
-        middle = low + (high - low) / 2
+        middle = low + (high - low) // 2
         B.count = middle
         B.cap = middle
         res = fight(A, B, num_iter)
