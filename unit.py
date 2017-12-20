@@ -286,8 +286,9 @@ class Stack(object):
         elif (self.name in ['Unicorn', 'War Unicorn'] and
               other.spell_immunity < 2 and
               not other.is_nonliving() and
-              other.name not in ['Troglodyte', 'Infernal Troglodyte',
-                                 'Giant', 'Titan'] and
+              other.name not in [
+                  'Troglodyte', 'Infernal Troglodyte', 'Giant', 'Titan',
+                  'Efreet', 'Efreet Sultan', 'Firebird', 'Phoenix'] and
               random() < .2):
             self.start_blindness(other)
             other.stunned_from_retaliation = retaliation
