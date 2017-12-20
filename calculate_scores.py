@@ -10,7 +10,7 @@ from unit import make_unit, Stack, data
 
 def calculate_scores(num_fights=500, log=100):
     units = data.values[:-5]
-    scores = np.zeros((units.shape[0], units.shape[0]))
+    scores = np.ones((units.shape[0], units.shape[0]))
 
     t0 = time.time()
     total_pairs = 0
