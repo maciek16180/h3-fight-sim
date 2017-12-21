@@ -102,42 +102,19 @@ class UnitType(object):
 class Stack(object):
 
     def __init__(self, unit, count):
-        self.count = count
+        # these values can't change during combat:
+        self.unit = unit
+        self.cap = count
         self.name = unit.name
-
-        self.hp = unit.hp
-        self.hp_left = self.hp
-
         self.speed = unit.speed
-        self.attack = unit.attack
-        self.defense = unit.defense
+        self.true_hp = unit.hp
+        self.true_attack = unit.attack
+        self.true_defense = unit.defense
         self.dmg_min = unit.dmg_min
         self.dmg_max = unit.dmg_max
-        self.shots = unit.shots
-        self.attributes = unit.attributes
-        self.fight_value = unit.fight_value
-        self.ai_value = unit.ai_value
         self.hates = unit.hates
         self.opp_elem = unit.opp_elem
-
-        self.aged = -1
-        self.poisoned = -1
-        self.times_poisoned = 0
-        self.cursed = 0
-        self.weakened = 0
-        self.diseased = 0
-
-        self.petrified = 0
-        self.blinded = 0
-        self.paralyzed = 0
-        self.stunned_from_retaliation = False
-
-        self.cap = self.count
-        self.true_max_hp = self.hp
-        self.true_attack = self.attack
-        self.true_defense = self.defense
-
-        self.rebirth_available = self.name == 'Phoenix' or False
+        self.attributes = unit.attributes
 
         if self.name == 'Battle Dwarf':
             self.magic_resist = .4
@@ -155,6 +132,31 @@ class Stack(object):
         else:
             self.spell_immunity = 0
 
+        # these can:
+        self.reset_state()
+
+    def reset_state(self):
+        self.count = self.cap
+        self.hp = self.true_hp
+        self.hp_left = self.hp
+        self.attack = self.true_attack
+        self.defense = self.true_defense
+        self.shots = self.unit.shots
+
+        self.aged = -1
+        self.poisoned = -1
+        self.times_poisoned = 0
+        self.cursed = 0
+        self.weakened = 0
+        self.diseased = 0
+
+        self.petrified = 0
+        self.blinded = 0
+        self.paralyzed = 0
+        self.stunned_from_retaliation = False
+
+        self.rebirth_available = self.name == 'Phoenix' or False
+
     def take_dmg(self, dmg):
         if dmg < self.hp_left:
             self.hp_left -= dmg
@@ -171,11 +173,15 @@ class Stack(object):
     def __calc_base_damage(self, other):
         real_dmg_max = self.dmg_min if self.cursed > 0 else self.dmg_max
         if self.count < 10:
-            base_dmg = sum([randint(self.dmg_min, real_dmg_max)
-                            for _ in range(int(self.count))])
+            base_dmg = np.random.randint(self.dmg_min, real_dmg_max + 1,
+                                         size=self.count).sum()
+            # base_dmg = sum([randint(self.dmg_min, real_dmg_max)
+            #                 for _ in range(int(self.count))])
         else:
-            base_dmg = sum([randint(self.dmg_min, real_dmg_max)
-                            for _ in range(10)]) * self.count // 10
+            base_dmg = np.random.randint(self.dmg_min, real_dmg_max + 1,
+                                         size=10).sum() * self.count // 10
+            # base_dmg = sum([randint(self.dmg_min, real_dmg_max)
+            #                 for _ in range(10)]) * self.count // 10
 
         defense = other.defense
         if self.name == 'Behemoth':
@@ -200,7 +206,7 @@ class Stack(object):
         base_dmg, base_dmg_bonus, base_dmg_reduction = \
             self.__calc_base_damage(other)
         dmg_bonus += base_dmg_bonus
-        dmg_reductions += [base_dmg_reduction]
+        dmg_reductions.append(base_dmg_reduction)
 
         if melee_penalty:
             dmg_reductions.append(.5)
@@ -243,9 +249,9 @@ class Stack(object):
                 not other.is_nonliving()):
             self.death_stare(other)
         elif (self.name == 'Thunderbird' and
+              other.spell_immunity < 2 and
               other.name not in ['Earth Elemental', 'Magma Elemental'] and
               random() < .2 and
-              other.spell_immunity < 2 and
               random() > other.magic_resist):
             self.thunderbolt(other)
         elif self.name == 'Rust Dragon':
@@ -255,17 +261,17 @@ class Stack(object):
               random() < .2):
             other.start_aging()
         elif (self.name == 'Wyvern Monarch' and
+                other.times_poisoned < 5 and
                 not other.is_nonliving() and
-                random() < .2 and
-                other.times_poisoned < 5):
+                random() < .2):
             other.start_poison()
         elif (self.name in ['Black Knight', 'Dread Knight', 'Mummy'] and
-              not other.is_undead() and
               other.spell_immunity < 1 and
-              random() > other.magic_resist and
+              not other.is_undead() and
               other.name not in [
                   'Efreet', 'Efreet Sultan', 'Fire Elemental',
-                  'Energy Elemental', 'Firebird', 'Phoenix']):
+                  'Energy Elemental', 'Firebird', 'Phoenix'] and
+              random() > other.magic_resist):
             if ((self.name == 'Mummy' and random() < .5) or
                     (self.name != 'Mummy' and random() < .2)):
                 self.start_curse(other)
@@ -274,7 +280,8 @@ class Stack(object):
               random() > other.magic_resist):
             self.start_weakness(other)
         elif (self.name == 'Zombie' and
-              not other.is_nonliving()):
+              not other.is_nonliving() and
+              random() < .2):
             self.start_disease(other)
         elif (self.name in ['Medusa', 'Medusa Queen', 'Basilisk',
                             'Greater Basilisk'] and
@@ -307,8 +314,8 @@ class Stack(object):
 
     def attack_range(self, other, dmg_bonus=0., range_penalty=False):
         assert self.is_shooter() and self.shots > 0
-        base_dmg, base_dmg_bonus, base_dmg_reduction = self.__calc_base_damage(
-            other)
+        base_dmg, base_dmg_bonus, base_dmg_reduction = \
+            self.__calc_base_damage(other)
         dmg_bonus += base_dmg_bonus
 
         damage = base_dmg * (1. + dmg_bonus) * (1. - base_dmg_reduction)
@@ -423,7 +430,7 @@ class Stack(object):
         assert self.aged == 0
         self.aged = -1
         hp_missing = self.hp - self.hp_left
-        self.hp = self.true_max_hp
+        self.hp = self.true_hp
         self.hp_left = self.hp - hp_missing
 
     def start_poison(self):
@@ -432,7 +439,7 @@ class Stack(object):
         if not was_already_poisoned:
             self.times_poisoned += 1
             hp_missing = self.hp - self.hp_left
-            self.hp = int(ceil(self.true_max_hp *
+            self.hp = int(ceil(self.true_hp *
                                (1 - .1 * self.times_poisoned)))
             self.hp_left = max(1, self.hp - hp_missing)
 
@@ -442,7 +449,7 @@ class Stack(object):
         if self.times_poisoned < 5 and self.poisoned >= 0:
             self.times_poisoned += 1
             hp_missing = self.hp - self.hp_left
-            self.hp = int(ceil(self.true_max_hp *
+            self.hp = int(ceil(self.true_hp *
                                (1 - .1 * self.times_poisoned)))
             self.hp_left = max(1, self.hp - hp_missing)
 
