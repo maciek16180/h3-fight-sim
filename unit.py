@@ -1,13 +1,11 @@
-import os
-import pandas as pd
-import numpy as np
+from pandas import read_csv
+from os.path import dirname, realpath, join
 
 from math import ceil
-from random import random, randint
+from random import random, randint, gauss
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-data = pd.read_csv(os.path.join(dir_path, 'CRTRAITS.TXT'), sep=',',
-                   encoding='utf-8')
+dir_path = dirname(realpath(__file__))
+data = read_csv(join(dir_path, 'CRTRAITS.TXT'), sep=',', encoding='utf-8')
 data.Attributes.values[data.Attributes.values == '0'] = ''
 
 crap = ['Plural', 'Wood', 'Mercury', 'Ore', 'Sulfur', 'Crystal', 'Gems',
@@ -70,10 +68,11 @@ elementals = {
 }
 
 
+# for sufficiently large n we can use faster normal approximation
 def binomial(n, p):
-    return np.random.binomial(n, p)
-    # no numpy alternative (slow)
-    # return sum(random() < p for _ in range(int(n)))
+    if n < 100:
+        return sum(random() < p for _ in range(int(n)))
+    return int(gauss(n*p, (n*p*(1-p))**.5))
 
 
 def make_unit(name):
@@ -173,15 +172,11 @@ class Stack(object):
     def __calc_base_damage(self, other):
         real_dmg_max = self.dmg_min if self.cursed > 0 else self.dmg_max
         if self.count < 10:
-            base_dmg = np.random.randint(self.dmg_min, real_dmg_max + 1,
-                                         size=self.count).sum()
-            # base_dmg = sum([randint(self.dmg_min, real_dmg_max)
-            #                 for _ in range(int(self.count))])
+            base_dmg = sum([randint(self.dmg_min, real_dmg_max)
+                            for _ in range(int(self.count))])
         else:
-            base_dmg = np.random.randint(self.dmg_min, real_dmg_max + 1,
-                                         size=10).sum() * self.count // 10
-            # base_dmg = sum([randint(self.dmg_min, real_dmg_max)
-            #                 for _ in range(10)]) * self.count // 10
+            base_dmg = sum([randint(self.dmg_min, real_dmg_max)
+                            for _ in range(10)]) * self.count // 10
 
         defense = other.defense
         if self.name == 'Behemoth':

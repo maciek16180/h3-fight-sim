@@ -1,15 +1,14 @@
-import os
-import sys
+from os.path import dirname, realpath
+from sys import path as sys_path
 
 from random import random
 from copy import copy
 
-sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+sys_path.append(dirname(realpath(__file__)))
 from unit import make_unit, Stack
 
 
 def fight(stackA, stackB, num_iter):
-
     wins = {stackA.name: [0, 0],
             stackB.name: [0, 0]}
 
