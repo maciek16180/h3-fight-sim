@@ -1,17 +1,11 @@
-from pandas import read_csv
-from os.path import dirname, realpath, join
+from os.path import dirname, realpath
+from sys import path as sys_path
 
 from math import ceil
 from random import random, randint, gauss
 
-dir_path = dirname(realpath(__file__))
-data = read_csv(join(dir_path, 'CRTRAITS.TXT'), sep=',', encoding='utf-8')
-data.Attributes.values[data.Attributes.values == '0'] = ''
-
-crap = ['Plural', 'Wood', 'Mercury', 'Ore', 'Sulfur', 'Crystal', 'Gems',
-        'Gold', 'Ability Text', 'Growth', 'Horde Growth', 'GuardsLow',
-        'GuardsHigh', 'Spells']
-data.drop(crap, axis=1, inplace=True)
+sys_path.append(dirname(realpath(__file__)))
+from crtraits import data, haters, elementals
 
 
 keywords = {
@@ -26,49 +20,8 @@ keywords = {
     'cusGOLEM'
 }
 
-haters = {
-    ('Angel', 'Arch Devil'),
-    ('Angel', 'Devil'),
-    ('Archangel', 'Arch Devil'),
-    ('Archangel', 'Devil'),
-    ('Arch Devil', 'Angel'),
-    ('Arch Devil', 'Archangel'),
-    ('Black Dragon', 'Giant'),
-    ('Black Dragon', 'Titan'),
-    ('Devil', 'Angel'),
-    ('Devil', 'Archangel'),
-    ('Genie', 'Efreet'),
-    ('Genie', 'Efreet Sultan'),
-    ('Efreet', 'Genie'),
-    ('Efreet', 'Master Genie'),
-    ('Efreet Sultan', 'Genie'),
-    ('Efreet Sultan', 'Master Genie'),
-    ('Titan', 'Black Dragon'),
-    ('Master Genie', 'Efreet'),
-    ('Master Genie', 'Efreet Sultan')
-}
 
-elementals = {
-    ('Storm Elemental', 'Magma Elemental'),
-    ('Storm Elemental', 'Earth Elemental'),
-    ('Energy Elemental', 'Ice Elemental'),
-    ('Energy Elemental', 'Water Elemental'),
-    ('Ice Elemental', 'Energy Elemental'),
-    ('Ice Elemental', 'Fire Elemental'),
-    ('Magma Elemental', 'Storm Elemental'),
-    ('Magma Elemental', 'Air Elemental'),
-    ('Fire Elemental', 'Ice Elemental'),
-    ('Fire Elemental', 'Water Elemental'),
-    ('Air Elemental', 'Magma Elemental'),
-    ('Air Elemental', 'Earth Elemental'),
-    ('Water Elemental', 'Energy Elemental'),
-    ('Water Elemental', 'Fire Elemental'),
-    ('Earth Elemental', 'Storm Elemental'),
-    ('Earth Elemental', 'Air Elemental')
-}
-
-
-# for sufficiently large n we can use faster normal approximation
+# for sufficiently large n we can use much faster normal approximation
 def binomial(n, p):
     if n < 100:
         return sum(random() < p for _ in range(int(n)))
@@ -76,15 +29,15 @@ def binomial(n, p):
 
 
 def make_unit(name):
-    return UnitType(*data.values[data.Singular.values == name][0])
+    assert name in data
+    return UnitType(*([name] + data[name]))
 
 
 class UnitType(object):
 
-    def __init__(self, name, fightv, aiv, hp, spd, att, df,
+    def __init__(self, name, aiv, hp, spd, att, df,
                  dmlow, dmhi, shots, abi):
         self.name = name
-        self.fight_value = fightv
         self.ai_value = aiv
         self.hp = hp
         self.speed = spd
@@ -93,7 +46,7 @@ class UnitType(object):
         self.dmg_min = dmlow
         self.dmg_max = dmhi
         self.shots = shots
-        self.attributes = {x for x in abi.split(' | ') if x in keywords}
+        self.attributes = [x for x in abi if x in keywords]
         self.hates = [v for (k, v) in haters if k == self.name]
         self.opp_elem = [v for (k, v) in elementals if k == self.name]
 
