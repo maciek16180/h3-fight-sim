@@ -1,10 +1,5 @@
-from os.path import dirname, realpath
-from sys import path as sys_path
-
 from random import random
-from copy import copy
 
-sys_path.append(dirname(realpath(__file__)))
 from unit import make_unit, Stack
 
 
@@ -17,6 +12,8 @@ def fight(stackA, stackB, num_iter):
         if s1.speed == s2.speed and random() < .5:
             return reversed(temp)
         return temp
+
+    # __pragma__('kwargs')
 
     def melee_hit(current, other):
         if (other.name == 'Azure Dragon' and
@@ -37,8 +34,8 @@ def fight(stackA, stackB, num_iter):
 
             current.attack_melee(
                 other,
-                melee_penalty=current.melee_penalty(),
-                dmg_reductions=dmg_reductions)
+                dmg_reductions=dmg_reductions,
+                melee_penalty=current.melee_penalty())
 
             if (other.is_alive() and
                     not current.no_retaliation()
@@ -50,8 +47,8 @@ def fight(stackA, stackB, num_iter):
                     retaliation_dmg_reductions.append(.5)
                 other.attack_melee(
                     current,
-                    melee_penalty=other.melee_penalty(),
                     dmg_reductions=retaliation_dmg_reductions,
+                    melee_penalty=other.melee_penalty(),
                     retaliation=True)
 
             if (current.is_alive() and
@@ -77,11 +74,13 @@ def fight(stackA, stackB, num_iter):
 
         return other, current
 
-    def range_hit(current, other, apply_penalty):
-        penalty = current.range_penalty() if apply_penalty else False
-        current.attack_range(other, range_penalty=penalty)
+    # __pragma__('nokwargs')
+
+    def range_hit(current, other, penalty):
+        penalty = current.range_penalty() if penalty else False
+        current.attack_range(other, penalty)
         if current.shoots_twice() and current.shots > 0:
-            current.attack_range(other, range_penalty=penalty)
+            current.attack_range(other, penalty)
         if other.name in ['Wight', 'Wraith', 'Troll'] and other.is_alive():
             other.regenerate()
         return other, current
@@ -92,6 +91,7 @@ def fight(stackA, stackB, num_iter):
         return current, other
 
     def walker_vs_shooter(walker, shooter):
+
         to_walk = starting_dist - 1
         first_move = to_walk % walker.speed
         if first_move == 0:
@@ -116,9 +116,9 @@ def fight(stackA, stackB, num_iter):
         num_half_shots = num_shots - num_full_shots
 
         for j in range(num_half_shots):
-            range_hit(shooter, walker, apply_penalty=True)
+            range_hit(shooter, walker, True)
         for j in range(num_full_shots):
-            range_hit(shooter, walker, apply_penalty=False)
+            range_hit(shooter, walker, False)
 
         current, other = walker, shooter
         return fight_to_death(current, other)
@@ -130,7 +130,7 @@ def fight(stackA, stackB, num_iter):
         starting_dist -= 1
 
     for it in range(num_iter):
-        current, other = units_order(copy(stackA), copy(stackB))
+        current, other = units_order(stackA, stackB)
 
         if not current.is_shooter() and not other.is_shooter():
             current, other = fight_to_death(current, other)
@@ -140,7 +140,7 @@ def fight(stackA, stackB, num_iter):
             while (current.is_alive() and
                     ((current.shots > 0 and other.shots > 0)
                         or not full_round)):
-                current, other = range_hit(current, other, apply_penalty=True)
+                current, other = range_hit(current, other, True)
                 full_round = not full_round
             if current.is_alive():
                 if current.shots == 0 and other.shots == 0:
@@ -149,17 +149,19 @@ def fight(stackA, stackB, num_iter):
                 else:
                     shooter = current if current.shots > 0 else other
                     walker = current if current.shots == 0 else other
-                    current, other = walker_vs_shooter(
-                        walker=walker, shooter=shooter)
+                    current, other = walker_vs_shooter(walker, shooter)
 
         else:
             shooter = current if current.is_shooter() else other
             walker = current if not current.is_shooter() else other
-            current, other = walker_vs_shooter(walker=walker, shooter=shooter)
+            current, other = walker_vs_shooter(walker, shooter)
 
         winner = current if current.is_alive() else other
         wins[winner.name][0] += 1
         wins[winner.name][1] += winner.count
+
+        stackA.reset_state()
+        stackB.reset_state()
 
     for s in [stackA.name, stackB.name]:
         if wins[s][0]:
@@ -168,7 +170,7 @@ def fight(stackA, stackB, num_iter):
     return wins
 
 
-def find_balance(nameA, nameB, num_iter, startA=None):
+def find_balance(nameA, nameB, num_iter, startA):
 
     if nameA == nameB:
         if startA:

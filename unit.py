@@ -1,10 +1,6 @@
-from os.path import dirname, realpath
-from sys import path as sys_path
+from math import ceil, pi, cos, log
+from random import random, randint
 
-from math import ceil
-from random import random, randint, gauss
-
-sys_path.append(dirname(realpath(__file__)))
 from crtraits import data, haters, elementals
 
 
@@ -21,16 +17,29 @@ keywords = {
 }
 
 
+# Box-Muller transform
+def my_gauss(mu, sigma):
+    return sigma * ((-2*log(random()))**.5 * cos(2*pi*random())) + mu
+
+
 # for sufficiently large n we can use much faster normal approximation
-def binomial(n, p):
+def my_binomial(n, p):
     if n < 100:
         return sum(random() < p for _ in range(int(n)))
-    return int(gauss(n*p, (n*p*(1-p))**.5))
+    return int(my_gauss(n*p, (n*p*(1-p))**.5))
+
+
+def my_divmod(n, m):
+    div = n // m
+    mod = n - m * div
+    return div, mod
 
 
 def make_unit(name):
     assert name in data
-    return UnitType(*([name] + data[name]))
+    # return UnitType(*([name] + data[name]))
+    d = data[name]
+    return UnitType(name, d[0], d[1], d[2], d[3], d[4], d[5], d[6], d[7], d[8])
 
 
 class UnitType(object):
@@ -114,7 +123,7 @@ class Stack(object):
             self.hp_left -= dmg
         else:
             dmg -= self.hp_left
-            num_killed, rem = divmod(dmg, self.hp)
+            num_killed, rem = my_divmod(dmg, self.hp)
             self.count -= num_killed + 1
             self.hp_left = self.hp - rem
             self.count = max(self.count, 0)
@@ -147,8 +156,11 @@ class Stack(object):
 
         return base_dmg, base_dmg_bonus, base_dmg_reduction
 
-    def attack_melee(self, other, dmg_bonus=0., dmg_reductions=None,
-                     melee_penalty=False, retaliation=False):
+    # __pragma__('kwargs')
+
+    def attack_melee(self, other, dmg_reductions=None, melee_penalty=False,
+                     retaliation=False):
+        dmg_bonus = 0.
         if dmg_reductions is None:
             dmg_reductions = []
         base_dmg, base_dmg_bonus, base_dmg_reduction = \
@@ -260,8 +272,11 @@ class Stack(object):
                 'Energy Elemental', 'Firebird', 'Phoenix']):
             self.efreet_fire_shield(fire_shield_damage)
 
-    def attack_range(self, other, dmg_bonus=0., range_penalty=False):
+    # __pragma__('nokwargs')
+
+    def attack_range(self, other, range_penalty):
         assert self.is_shooter() and self.shots > 0
+        dmg_bonus = 0.
         base_dmg, base_dmg_bonus, base_dmg_reduction = \
             self.__calc_base_damage(other)
         dmg_bonus += base_dmg_bonus
@@ -408,7 +423,7 @@ class Stack(object):
         else:
             damage_dealt -= self.hp - self.hp_left
             self.hp_left = self.hp
-            res, rem = divmod(damage_dealt, self.hp)
+            res, rem = my_divmod(damage_dealt, self.hp)
             self.count = min(self.cap, self.count + res)
             if self.count < self.cap and rem:
                 self.count += 1
@@ -446,7 +461,7 @@ class Stack(object):
 
     def death_stare(self, other):
         assert self.name == 'Mighty Gorgon' and not other.is_nonliving()
-        to_death_stare = min(binomial(n=self.count, p=.1),
+        to_death_stare = min(my_binomial(self.count, .1),
                              (self.count + 9) // 10)
         if to_death_stare:
             other.count = max(0, other.count - to_death_stare)
@@ -455,7 +470,7 @@ class Stack(object):
     def rebirth(self):
         assert (self.name == 'Phoenix' and not self.is_alive() and
                 self.rebirth_available)
-        certain, rem = divmod(self.count, 5)
+        certain, rem = my_divmod(self.count, 5)
         to_rebirth = certain + (random() < .2*rem)
         self.count = to_rebirth
         self.rebirth_available = False
