@@ -7,9 +7,7 @@ def fight(nameA, countA, nameB, countB, num_fights):
     A = Stack(make_unit(nameA), countA)
     B = Stack(make_unit(nameB), countB)
     result = fight_orig(A, B, num_fights)
-    resA = A.name + ": {}".format(result[A.name][0])
-    resB = B.name + ": {}".format(result[B.name][0])
-    return resA, resB
+    return result[A.name][0], result[B.name][0]
 
 
 def find_balance(nameA, countA, nameB, countB, num_fights):
@@ -19,7 +17,4 @@ def find_balance(nameA, countA, nameB, countB, num_fights):
     name1 = nameA if count1 == countA else nameB
     name2 = nameB if count1 == countA else nameA
     result = find_balance_orig(name1, name2, num_fights, count1)
-    res = u"{} {} \u2248 {} {}".format(
-        result[idxA], nameA,
-        result[idxB], nameB)
-    return res
+    return result[idxA], result[idxB], idxA == 0

@@ -188,10 +188,13 @@ def find_balance(nameA, nameB, num_iter, startA):
     startA = startA or unitB.ai_value * 10
     startB = int(float(startA) / unitB.ai_value * unitA.ai_value)
 
+    print(startA, startB)
+
     A = Stack(unitA, startA)
     B = Stack(unitB, startB)
 
     res = fight(A, B, num_iter)
+    print(res)
 
     if balanced(res):
         return A.count, B.count
@@ -202,10 +205,13 @@ def find_balance(nameA, nameB, num_iter, startA):
     enough = False
 
     while not enough:
+        print(B.count)
         x1 = B.count
         B.count += change
         B.cap += change
         res = fight(A, B, num_iter)
+        print(res)
+
         B_won = res[A.name][0] < res[B.name][0]
         enough = B_won != B_won_last
         if not enough:
@@ -218,13 +224,15 @@ def find_balance(nameA, nameB, num_iter, startA):
 
     low = min(x1, x2)
     high = max(x1, x2)
-
+    print("\n", low, high, "\n")
     # here binsearch from [low, high] for balanced result
     while True:
         middle = low + (high - low) // 2
+        print(middle)
         B.count = middle
         B.cap = middle
         res = fight(A, B, num_iter)
+        print(res)
         if balanced(res) or abs(high - low) <= 1:
             return A.count, max(B.count, 1)
         B_won = res[A.name][0] < res[B.name][0]
