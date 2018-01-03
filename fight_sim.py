@@ -11,10 +11,14 @@ def fight(nameA, countA, nameB, countB, num_fights):
 
 
 def find_balance(nameA, countA, nameB, countB, num_fights):
-    count1 = countA or countB
-    idxA = 1 if countB else 0
-    idxB = (idxA + 1) % 2
-    name1 = nameA if count1 == countA else nameB
-    name2 = nameB if count1 == countA else nameA
+    swap = not countA
+    if swap:
+        count1 = countB
+        name1, name2 = nameB, nameA
+        idxA = 1
+    else:
+        count1 = countA
+        name1, name2 = nameA, nameB
+        idxA = 0
     result = find_balance_orig(name1, name2, num_fights, count1)
-    return result[idxA], result[idxB], idxA == 0
+    return result[idxA], result[(idxA + 1) % 2], swap
