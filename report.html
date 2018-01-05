@@ -4,7 +4,7 @@
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="HoMM-III-moster-duel-simulator">HoMM III moster duel simulator<a class="anchor-link" href="#HoMM-III-moster-duel-simulator">&#182;</a></h1><p>This is a tool for measuring combat performance of creatures in HoMM III. The in-game AI Values are a good estimation of the unit's real strength, but they are global, which means there is only a single value to describe the quality of creature $A$ against both creatures $B$ and $C$, which can be vastly different. For example, when a Mighty Gorgon takes on a stack of Pixies, its death stare ability is almost useless, because a Pixie has a very low HP. However, in a fight between Mighty Gorgons and Azure Dragons, the Gorgons' special power is invaluable. This can't be captured by assigning only one fixed number to each monster. Mighty Gorgons vs Azure Dragons is probably the best example, but there are many more like it, albeit less extreme.</p>
-<p>I made a simplified (but equivalent) version of Heroes III combat engine, which allowed me to do fast duel simulations between every single pair of units. That gave me lot of numbers describing how a given unit performs in a direct confrontation against every other unit in HoMM III.</p>
+<p>I made a simplified (but equivalent) version of Heroes III combat engine, which allowed me to do fast duel simulations between every single pair of units. That gave me lot of numbers describing how any given unit performs in a direct confrontation against every other unit in HoMM III.</p>
 <p>Some caveats:</p>
 <ul>
 <li>it's a duel: a single stack of unit $A$ fights vs a single stack of unit $B$</li>
@@ -90,7 +90,7 @@ Result is 15890 / 15292 = 1.039
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Unit-value">Unit value<a class="anchor-link" href="#Unit-value">&#182;</a></h2><p>Given a subset of monsters $S$ and a creature $A$ we can try to calculate something similar to AI Value, but representing the effectiveness of $A$ specifically against $S$. At first, I used the following formula:</p>
+<h2 id="Unit-value">Unit value<a class="anchor-link" href="#Unit-value">&#182;</a></h2><p>Given a subset of monsters $S$ and a creature $A$ we can try to calculate something similar to AI Value, but representing the effectiveness of $A$ specifically against $S$. This gives us the possibility to measure the quality of a certain unit against only units of higher level, or against one specific town. That quality can vary dramatically, so it's an interesting experiment. At first, I used the following formula:</p>
 <p>$P$ - Pikeman</p>
 <p>$A_B$ - coefficient for a pair $(A, B)$; how many $A$ is needed to match one $B$</p>
 <p>$\mathrm{Value}(A, S) = \dfrac{\sum\limits_{s \in S} A_s^{-1}}{\sum\limits_{s \in S} P_s^{-1}} \times 80$</p>
