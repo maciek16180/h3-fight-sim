@@ -1,66 +1,23 @@
-# h3-fight-sim
+# HoMM III monster duel simulator
 
-**Aktualne wyniki wszytkich walk są w scores/scores.csv**
+**Current results of all simulations are in scores/scores.csv**
 
-Opis plików:
+Python 3 is required.
 
-CRTRAITS.TXT - dane o stworkach. Wyczyszczona i lekko zmieniona wersja, w nieco innym formacie niż oryginalny plik z gry. 
+Files:
 
-combat_sim.ipynb - notebook do eksperymentów
+`CRTRAITS.TXT` - creatures data. Cleaned up and slightly modified version, the format is a bit different than the original file from the game.
 
-README.md - ten plik
+`report.html`, `report.ipynb` - full description of what this thing does
 
-combat.py - kod walk
+`combat.py`, `unit.py` - the actual code
 
-unit.py - reprezentacja jednostki i oddziału
+`calculate_scores.py` - script for scores calculation. You need numpy and pandas for that.
 
-misc/ - pierdoły
+`fight_sim.py` - essential functions, in one simple file. I created it to make the conversion to Javascript easier (http://www.transcrypt.org/).
 
-scores/ - wyniki
+`misc/` - crap
+
+`scores/` - simulation results
   
-#####  
-
-Jak czytać wyniki:
-
-**wyniki w misc/castle_scores są nieaktualne**
-
-scores.csv, castle_scores.csv:  
-  Jednostka X walczy z Y. Eksperymentalnie dobieram liczby jednostek (nX i nY) w oddziałach tak, żeby szanse wygranej każdej ze stron były mniej więcej równe. Liczba w wierszu X i kolumnie Y to nX/nY, czyli ile X trzeba, żeby sprać jednego Y.
-  
-castle_scores_ai_value_based.csv:  
-  Liczba w wierszu X i kolumnie Y to Y.aivalue/X.aivalue.
-  
-castle_comparison.csv:  
-  Iloraz pierwszego i drugiego. Usunąłem wyniki bliskie 1 dla lepszej czytelności. Jeśli liczba w wierszu X i kolumnie Y jest mniejsza od 1, to heurystyka AI Value nie docenia X. Jeśli jest większa od 1, to heurystyka przecenia X.
-  
-#####
-
-Uwagi:
-
-- Symulacje dają w miarę stabilne rezultaty dla dużych oddziałów, dla małych wyniki są dość zachwiane (wina mechaniki, nie kodu). Np. 8 Archaniołów klepie bez problemu 510 Pikinierów, ale 80 Archaniołów i 5100 Pikinierów ma w miarę równe szanse. Ogólnie duże jednostki sprawdzają się znacznie lepiej w małych potyczkach.
-
-- Jednostki Zamku liczyły się łącznie jakąś godzinę. Nie robiłem w zasadzie żadnych optymalizacji, żeby kod był bardziej zrozumiały, ale ostatni "poziom" - szukanie zbalansowanych rozmiarów oddziałów - można łatwo zrównoleglić.
-
-- Nie wszystkie umiejętności potworów są wzięte pod uwagę, ale chyba większość najistotniejszych zrobiłem:
-    - duża istota (przy obliczaniu odległości od strzelca)
-    - strzelanie
-    - brak kontrataku
-    - brak kar w walce wręcz / na odległość
-    - podwójny atak / strzał
-    - odrodzenie Feniksa
-    - obniżanie obrony Behemotów
-    - podwójne obrażenia Upiornego rycerza
-    - wyssanie życia Wampirzego lorda
-    - spojrzenie śmierci Wielkiej gorgony
-    - nienawiść i podwójne obrażenia żywiołaków
-    - strach Błękitnego smoka
-    - regeneracja Zjaw i Trolli
-    - tarcza ognia Sułtańskich ifrytów
-    - kwasowy oddech Rdzawego smoka
-    - atak błyskawicą Ptaka gromu
-    - postarzanie Upiornego smoka
-    - zatrucie Królewskiej wiwerny
-    - klątwa Mumii i Czarnych / Upiornych rycerzy (drobna nieścisłość w czasie trwania)
-    - osłabienie Smoczej ważki (j.w.)
-    
-- W walce strzelca ze zwykłą jednostką sprawdzam ile strzałów jest wykonywane z karą za odległość (przy założeniu optymalnych ruchów obu stron, wliczając czekanie - wydaje mi się, że komputer to umie)
+Refer to `report.html` or `report.ipynb` for details. I have an browser demo for all of this, but it's not live yet.
