@@ -1,0 +1,266 @@
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="HoMM-III-moster-duel-simulator">HoMM III moster duel simulator<a class="anchor-link" href="#HoMM-III-moster-duel-simulator">&#182;</a></h1><p>This is a tool for measuring combat performance of creatures in HoMM III. The in-game AI Values are a good estimation of the unit's real strength, but they are global, which means there is only a single value to describe the quality of creature $A$ against both creatures $B$ and $C$, which can be vastly different. For example, when a Mighty Gorgon takes on a stack of Pixies, its death stare ability is almost useless, because a Pixie has a very low HP. However, in a fight between Mighty Gorgons and Azure Dragons, the Gorgons' special power is invaluable. This can't be captured by assigning only one fixed number to each monster. Mighty Gorgons vs Azure Dragons is probably the best example, but there are many more like it, albeit less extreme.</p>
+<p>I made a simplified (but equivalent) version of Heroes III combat engine, which allowed me to do fast duel simulations between every single pair of units. That gave me lot of numbers describing how a given unit performs in a direct confrontation against every other unit in HoMM III.</p>
+<p>Some caveats:</p>
+<ul>
+<li>it's a duel: a single stack of unit $A$ fights vs a single stack of unit $B$</li>
+<li>no heroes or terrain modifiers, units use their base stats</li>
+<li>not every special ability got implemented, but a vast majority of them did, see the Combat Rules section</li>
+<li>there are no obstacles on the battlefield</li>
+</ul>
+<p>The Python code is available in a public repository at <a href="https://github.com/maciek16180/h3-fight-sim">https://github.com/maciek16180/h3-fight-sim</a>.</p>
+<p>Check out &lt; insert-address-here &gt; for a live demonstration and results!</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Estimation-method">Estimation method<a class="anchor-link" href="#Estimation-method">&#182;</a></h2><p>Effectiveness of creature $A$ in combat versus creature $B$ is calculated by simulating a large number of fights between those units. The aim is to find the stack sizes for $A$ and $B$ such that both stacks have more or less equal chances against each other. The exact method is as follows:</p>
+<ul>
+<li>$A$, $B \leftarrow$ types of fighting creatures</li>
+</ul>
+<ul>
+<li>$S_A$, $S_B \leftarrow$ stacks with some starting counts</li>
+</ul>
+<ul>
+<li>simulate combat between $S_A$ and $S_B$, find $S_w$, $S_l$ - winning stack and losing stack (*)</li>
+</ul>
+<ul>
+<li>$\mathrm{low} \leftarrow \mathrm{count}(S_l)$</li>
+</ul>
+<ul>
+<li>while $S_l$ loses to $S_w$:<ul>
+<li>$\mathrm{low} \leftarrow \mathrm{count}(S_l)$</li>
+<li>incease $\mathrm{count}(S_l)$ by some amount (I chose $10 \%$ of the starting stack size)</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>search in $(\mathrm{low}, \mathrm{count}(S_l))$ interval for a number $k$ of creatures in $S_l$, such that the result of $S_l$ vs $S_w$ is balanced</li>
+</ul>
+<ul>
+<li>set $\mathrm{count}(S_l)$ to $k$</li>
+</ul>
+<ul>
+<li><p>return $\dfrac{\mathrm{count}(S_A)}{\mathrm{count}(S_B)}$</p>
+<p>(*) If, for example, $S_l$ is $S_A$, then by changing $S_l$ later, we also change $S_A$.</p>
+</li>
+</ul>
+<p>Whenever I simulate combat between two stacks, I actually do $n$ fights (500 by default) and count wins of each side. A stack loses, if it won less than half of the fights. Combat result is "balanced" when the difference between numbers of wins is lower than 10% of $n$.</p>
+<p>We also have to somehow set the starting sizes for both stacks. I used AI Value for that. In a fight between $A$ and $B$ I set $\mathrm{cout}(S_A)$ = $p \times \mathrm{AI\_Value}(B)$ and $\mathrm{cout}(S_B)$ = $p \times \mathrm{AI\_Value}(A)$, with $p=10$.</p>
+<p>I didn't do mirror fights (same unit on both sides), the result is set to tie in those cases.</p>
+<h3 id="Example:-Mighty-Gorgon-vs-Scorpicore">Example: Mighty Gorgon vs Scorpicore<a class="anchor-link" href="#Example:-Mighty-Gorgon-vs-Scorpicore">&#182;</a></h3>
+<pre><code>n = 500
+
+Mighty Gorgon's AI Value = 1028
+Scorpicore's    AI Value = 1589
+
+Starting counts: 15890, 10280
+
+Gorgons win 479 fights, Scorpicores' stack size up to 11308
+Gorgons win 457 fights, Scorpicores' stack size up to 12336
+Gorgons win 395 fights, Scorpicores' stack size up to 13364
+Gorgons win 393 fights, Scorpicores' stack size up to 14392
+Gorgons win 335 fights, Scorpicores' stack size up to 15420
+Gorgons win 225 fights, losing the combat
+
+Now binary search in (14392, 15420) for a balanced count.
+
+Check 14906: Gorgons win 298 fights, go higher
+Check 15163: Gorgons win 281 fights, go higher
+Check 15292: Gorgons win 245 fights, balanced
+
+Result is 15890 / 15292 = 1.039
+
+</code></pre>
+<p>This estimation took 1.4s on a middle-class laptop.</p>
+<p>We need approximately 1.039 Mighty Gorgons to match a Scorpicore. The result may slightly vary, because this particular pair has a lot of randomness to it (death stare and paralysis). For n=500 I was getting results between 1.029 and 1.039. Setting n=5000 decreased variance, and the result was almost always 1.039. It upped the run time to 13.5s though. I think n=500 is both fast and consistent enough. Additionaly we see that AI underestimates Mighty Gorgon quite a bit against Scorpicore.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Unit-value">Unit value<a class="anchor-link" href="#Unit-value">&#182;</a></h2><p>Given a subset of monsters $S$ and a creature $A$ we can try to calculate something similar to AI Value, but representing the effectiveness of $A$ specifically against $S$. At first, I used the following formula:</p>
+<p>$P$ - Pikeman</p>
+<p>$A_B$ - coefficient for a pair $(A, B)$; how many $A$ is needed to match one $B$</p>
+<p>$\mathrm{Value}(A, S) = \dfrac{\sum\limits_{s \in S} A_s^{-1}}{\sum\limits_{s \in S} P_s^{-1}} \times 80$</p>
+<p>Some explanation: the higher $A_B$, the worse $A$'s chances in a duel with $B$. We want the unit value to behave the other way around, so we invert the results (hence the $^{-1}$). Inverted scores of $A$ are summed over each unit in $S$. To make those values meaningful, we need some point of reference, so we scale them in such a way, to make Pikeman's value always be 80 (equal to it's AI Value).</p>
+<p>After a while I thought of another way of calculating those values. Instead of comparing $A$ to a Pikeman only during normalization, we can do it for every unit in $S$ separately:</p>
+<p>$\mathrm{ValueAlt}(A, S) = \dfrac{80}{\left\vert{S}\right\vert} \sum\limits_{s \in S} \dfrac{P_s}{A_s}$</p>
+<p>The second formula behaves slightly different. To show that, let's consider this simple scenario:</p>
+
+<pre><code>A  = Marksman
+S0 = {Archer}
+S  = {Archer, Archangel}
+
+The table below shows combat results for Pikeman and Marksman against S.
+
+Unit        vs Archer   vs Archangel
+Pikeman       1.575        64.529
+Marksman      0.641        77.595
+
+Both formulas give the same result for a set with only one element. For example, 
+considering only Archer we get:
+
+Value(A, S0) = ValueAlt(A, S0) = 1.575 / 0.641 * 80 ~= 196
+
+Now, let's add Archangel to the mix.
+
+Value(A, S)    = (1 / 0.641 + 1 / 77.595) / (1 / 1.575 + 1 / 64.529) * 80 ~= 193
+ValueAlt(A, S) = (80 / 2) * (1.575 / 0.641 + 64.529 / 77.595)             ~= 131
+
+</code></pre>
+<p>The results differ quite a bit. Adding the Archangel (against which the performance of both Pikeman and Marksman is similarily poor), strongly decreased the Marksman's $\mathrm{ValueAlt}$, while leaving its $\mathrm{Value}$ almost untouched. Both behaviors make sense in their own way, and I am not sure which one I like better. I include the alternative version as a checkbox on site.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Combat-simulation">Combat simulation<a class="anchor-link" href="#Combat-simulation">&#182;</a></h2><p><em>In this section, a </em>shooter<em> means a creature with ranged attack (i.e. has number of shots &gt; 0), and a </em>walker<em> is a creature without one.</em></p>
+<p>The combat engine I use is greatly simplified, but in a vast majority of cases should be equivalent to the original one. I am only interested in battles between singular stacks (like 100 Archers vs 20 Crusaders), so there is no need to implement the entire battlefield. This allowed me to describe the flow of combat using very simple rules. There is no explicit stack movement or combat rounds. Defending does not exist; it can prolong the combat indefinitely and we can't have that. As far as waiting goes, there is no point to do it outside of the walker - shooter encounter described below.</p>
+<p>I distinguish three basic cases:</p>
+
+<pre><code>1) walker - walker
+2) shooter - shooter
+3) walker - shooter
+
+</code></pre>
+<p><strong>1) Walker - walker</strong></p>
+<p>Simple case, the stacks keep attacking each other until one of them is dead. The stack with the higher speed starts, ties are broken at random.</p>
+<p><strong>2) Shooter - shooter</strong></p>
+<p>THe stacks keep shooting at each other until one of them is dead or one of them has no more ammunition. In the latter case we are reduced to the case (3). The order of attacks is the same as in case (1).</p>
+<p><strong>3) Walker - shooter</strong></p>
+<p>The most complicated case. In short: shooter shoots at walker until walker catches it, then they fight hand-to-hand. I calculate how many full-strength shots walker can avoid if it's smart.</p>
+<p>Long version (Python-ish syntax):</p>
+
+<pre><code>d  = number of hexes the walker has to travel to be able to attack
+ws = walker's speed
+
+if walker is slower than shooter (*):
+    number_of_shots = (d // ws + (d % ws &gt; 0))
+
+    A walker can avoid at most one full shot. 
+    To do so, it has to not enter the shooter's range when doing it's first move.
+    Shooter is faster, so it can wait to force walker to move first, 
+    which makes walker unable to avoid a full shot by waiting. 
+    No creature in the game is slow enough to be outside of range after two rounds.
+
+    Optimal length of the first move for a walker is m, calculated as follows:
+        m = d % ws
+        if m == 0:
+            m = ws
+    Every subsequent move has length ws. Making first move longer than m is
+    unnecessary, making it any shorter increases the number of rounds without attack 
+    for a walker.
+    If shooter has no penalty after walker marches m hexes forward, than the walker
+    can't profitably avoid any full shots. Otherwise, exactly one shot is fired with
+    penalty. 
+
+if walker is faster than shooter (**):
+    numer_of_shots = (d // ws - (d % ps == 0))
+
+    In this case walker can avoid one additional shot, because it can wait to force
+    shooter to shoot first. Up to one shot is avoided by smart movement, like in 
+    the previous case. Overall, walker can avoid one or two full shots, depending on
+    its speed.
+
+if walker and shooter have the same speed:
+    In this case starting stack is chosen randomly. Waiting is not beneficial 
+    anymore, because it changes the turn order for the rest of the fight. This makes
+    walker unable to avoid any shots by waiting.
+
+    number_of_shots is the same as in (*) if the shooter starts, and the same as in
+    (**) otherwise.
+
+Now shooter shoots at walker number_of_shots times, some of which are penalized
+accordingly. After that we have case (1), with the walker being starting stack.</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Combat-rules">Combat rules<a class="anchor-link" href="#Combat-rules">&#182;</a></h2><p>I took into account every basic combat mechanic and creature characteristic, like attack, defense, number of shots, retaliation, creature size, etc. In addition to that, I implemented most special abilities:</p>
+<ul>
+<li>no enemy retaliation</li>
+<li>no meele penalty</li>
+<li>double attack or shot</li>
+<li>rebirth (Phoenix)</li>
+<li>enemy defense reduction (Behemoth, Ancient Behemoth)</li>
+<li>death blow (Dread Knight)</li>
+<li>life drain (Vampire Lord)</li>
+<li>death stare (Mighty Gorgon)</li>
+<li>hate (e.g. Angel - Devil) and double damage (opposing Elementals)</li>
+<li>fear (Azure Dragon)</li>
+<li>regeneration (Wight, Wraith, Troll)</li>
+<li>fire shield (Efreet Sultan)</li>
+<li>acid breath (Rust Dragon)</li>
+<li>lighning strike (Thunderbird)</li>
+<li>aging (Ghost Dragon)</li>
+<li>poison (Wyvern Monarch)</li>
+<li>curse (Mummy, Black Knight, Dread Knight) (small discrepancy in duration - sometimes ends half a round too early)</li>
+<li>weakness (Dragon Fly) (same as above)</li>
+<li>disease (Zombie) (same as above)</li>
+<li>blind (Unicorn, War Unicorn)</li>
+<li>paralyzing venom (Scorpicore)</li>
+<li>petrification (all Basilisks and Medusas)</li>
+</ul>
+<p>In all cases (I hope) I consider the following creatures' immunities:</p>
+<ul>
+<li>golems - less magic damage (%)</li>
+<li>Firebird, Phoenix, Efreet, Efreet Sultan - immune to fire spells</li>
+<li>all undeads - resistances of undeads</li>
+<li>all elementals - resistances of elementals</li>
+<li>gargoyles, golems - resistances of non-living creatures</li>
+<li>Green Dragon, Red Dragon, Azure Dragon - immune to spells 1-3</li>
+<li>Gold Dragon - immune to spells 1-4</li>
+<li>Black Dragon, Magic Elemental - immune to all spells</li>
+<li>Dwarf, Battle Dwarf, Crystal Dragon - magic resistance (%)</li>
+<li>Giant, Titan - immune to mind spells</li>
+<li>Troglodytes, Infernal Troglodytes - immune to blind and petrification</li>
+</ul>
+<p>Not implemented:</p>
+<ul>
+<li>any spells cast by creatures (most of them are useless in a duel anyway, others can take too much time to implement; this does not include incidental effects, like Efreet's Fire Shield or Dragon Fly's Weakness)</li>
+<li>jousting (Cavalier, Champion)</li>
+<li>strike and return (Harpy Hag)</li>
+<li>abilities that are useless in a duel (like Dendroids' binding)</li>
+<li>everything else I forgot</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Various-stuff">Various stuff<a class="anchor-link" href="#Various-stuff">&#182;</a></h2><p>The calculated relative strength values are stable only for large stacks. For example, when Pikemen deal 700 damage, they kill 2 Archangels. When they deal 10 times more, they kill 28 Archangels, which is 14 times more. This leads to the situation where 8 Archangels almost always win against 520 Pikemen, but when you multiply both stack sizes by 10, suddenly the result is not far from 50-50. It's caused by the fact, that low amouts of damage have no effect on combat abilities of high-level units (the stack's efficiency stays the same until some units actually get killed). It means that for small stack sizes, calculated values are going to favor high-level units. You can of course run the simulator yourself to find the matching Pikemen stack for any number of Archangels.</p>
+<hr>
+<p>The entire thing is written in Python 3.6.3 and for the most part doesn't require any non-standard modules. I had to make small concessions to be compatible with Transcrypt (<a href="http://www.transcrypt.org/">http://www.transcrypt.org/</a>), which I use to automagically get the Javascript version running on site.</p>
+<hr>
+<p>Useful links:</p>
+<p><a href="http://heroes.thelazy.net/">http://heroes.thelazy.net/</a> - invaluable source of knowledge about Heroes III</p>
+<p><a href="http://heroescommunity.com/viewthread.php3?TID=19321&amp;pagenumber=2">http://heroescommunity.com/viewthread.php3?TID=19321&amp;pagenumber=2</a> - description of CRTRAITS.TXT</p>
+<p><a href="http://heroescommunity.com/viewthread.php3?TID=12210&amp;pagenumber=2">http://heroescommunity.com/viewthread.php3?TID=12210&amp;pagenumber=2</a> - explanation of Mighty Gorgon's death stare</p>
+
+</div>
+</div>
+</div>
+ 
+
