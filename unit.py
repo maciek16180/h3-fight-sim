@@ -4,6 +4,8 @@ from random import random, randint
 from crtraits import data, haters, elementals
 
 
+data = dict(data)
+
 keywords = {
     'DOUBLE_WIDE',
     'SHOOTING_ARMY',

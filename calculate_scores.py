@@ -5,19 +5,21 @@ import pandas as pd
 from argparse import ArgumentParser
 
 from combat import find_balance, fight
-from unit import make_unit, Stack, data
+from unit import make_unit, Stack
+from crtraits import data
 
 
 def calculate_scores(num_fights=500, log=100):
-    units = data.values[:-5]
-    scores = np.ones((units.shape[0], units.shape[0]))
+    names = [d[0] for d in data]
+    num_units = len(names)
+    scores = np.eye(num_units)
 
     t0 = time.time()
     total_pairs = 0
-    for u_idx in range(units.shape[0]):
-        u_name = units[u_idx][0]
-        for v_idx in range(u_idx + 1, units.shape[0]):
-            v_name = units[v_idx][0]
+    for u_idx in range(num_units):
+        u_name = names[u_idx]
+        for v_idx in range(u_idx + 1, num_units):
+            v_name = names[v_idx]
             cnt_u, cnt_v = find_balance(u_name, v_name, num_fights)
             scores[u_idx, v_idx] = cnt_u / float(cnt_v)
             scores[v_idx, u_idx] = cnt_v / float(cnt_u)
@@ -39,7 +41,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     scores = calculate_scores(args.num_fights, args.log_interval)
-    scores = pd.DataFrame.from_records(
-        scores, columns=data.Singular.values[:-5])
-    scores.insert(0, 'Name', pd.Series(data.Singular.values[:-5]))
+    scores = pd.DataFrame.from_records(scores, columns=names)
+    scores.insert(0, 'Name', pd.Series(names))
     scores.to_csv(args.output_file)
