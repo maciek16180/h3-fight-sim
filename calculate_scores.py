@@ -9,8 +9,9 @@ from unit import make_unit, Stack
 from crtraits import data
 
 
+names = [d[0] for d in data]
+
 def calculate_scores(num_fights=500, log=100):
-    names = [d[0] for d in data]
     num_units = len(names)
     scores = np.eye(num_units)
 
@@ -20,7 +21,7 @@ def calculate_scores(num_fights=500, log=100):
         u_name = names[u_idx]
         for v_idx in range(u_idx + 1, num_units):
             v_name = names[v_idx]
-            cnt_u, cnt_v = find_balance(u_name, v_name, num_fights)
+            cnt_u, cnt_v = find_balance(u_name, v_name, num_fights, None)
             scores[u_idx, v_idx] = cnt_u / float(cnt_v)
             scores[v_idx, u_idx] = cnt_v / float(cnt_u)
             print('%s vs %s %.3f' % (u_name, v_name, cnt_u / float(cnt_v)))
